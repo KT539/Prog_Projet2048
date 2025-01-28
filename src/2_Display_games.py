@@ -3,21 +3,21 @@
 # Author: Kilian Testard
 # Version: 1.0 21.01.2025
 
+
 from tkinter import *
-import tkinter.font
 
-# game0 list
-'''game=[[0,0,0,0],
-       [0,0,0,0],
-       [0,0,0,0],
-       [0,0,0,0]]'''
 
-# game1 list
-game=[[512,0,2,0],
-       [0,0,0,0],
-       [0,2,0,0],
-       [0,0,0,0]]
+# empty list to create the labels at 0
+game0=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
 
+# game_start list
+'''game=[[0,0,2,0],[0,0,0,0],[0,2,0,0],[0,0,0,0]]'''
+
+# game_model list
+game=[[8192,4096,2048,1024],[512,256,128,0],[64,32,16,0],[8,4,2,0]]
+
+
+# dictionary of colors
 colors={0:"#CCCCCC",
         2:"#9FC5F8",
         4:"#597EAA",
@@ -33,34 +33,57 @@ colors={0:"#CCCCCC",
         4096:"#990000",
         8192:"#F1C232"}
 
+
 # empty labels list
 labels=[[None,None,None,None],[None,None,None,None],[None,None,None,None],[None,None,None,None]]
 
-dx=0 # horizontal distance between labels
-dy=0 # vertical distance between labels
 
-# display game1 values
-def display():
-    for line in range(len(game)):
-        for col in range(len(game[line])):
-            labels[line][col].config(text=game[line][col], bg=colors[game[line][col]])
+# horizontal distance between labels
+dx=104
 
+# vertical distance between labels
+dy=97
+
+# horizontal beginning of the labels
+x0_labels = 195
+
+# vertical beginning of the labels
+y0_labels = 130
+
+# horizontal beginning of the title
+x0_title = 115
+
+# vertical beginning of the title
+y0_title = 0
 
 
 # creating the window
 win = Tk()
-win.geometry("1000x750")
+win.geometry("800x600")
 
-# Title
-Label(text="8192",width=25, height=3,  font=("Arial", 15)).grid(row=0,column=0, columnspan=2,padx=0,pady=0)
 
-#labels creation and position
-for line in range(len(game)):
-    for col in range(len(game[line])):
+# title
+(Label(text="8192",width=25, height=3,  font=("Arial", 30)).place(x=x0_title, y=y0_title))
+
+
+# display game values
+def display():
+    for line in range(len(game)):
+        for col in range(len(game[line])):
+            if game[line][col]>0:
+                labels[line][col].config(text=game[line][col], bg=colors[game[line][col]])
+            else:
+                labels[line][col].config(text="", bg=colors[game[line][col]])
+
+
+# labels creation and positioning
+for line in range(len(game0)):
+    for col in range(len(game0[line])):
         # creation without placement
-        labels[line][col] = Label (win, text =game[line][col], width=15, height=5, borderwidth=1, relief="solid", font=("Arial", 15), bg="#FFFFFF")
-        # label positionning in the windows
-        labels[line][col].grid (row=line+1,column=col,padx=dx,pady=dy)
+        labels[line][col] = Label (win, text =game0[line][col], width=9, height=4, borderwidth=1, relief="solid", font=("Arial", 15), bg="#FFFFFF",)
+        # label positioning in the windows
+        (labels[line][col].place(x=x0_labels + dx * col, y=y0_labels + dy * line))
+
 
 display()
 win.mainloop()
