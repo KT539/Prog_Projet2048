@@ -8,17 +8,17 @@ from tkinter import *
 
 
 # empty list to create the labels at 0
-game0=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+game0 = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
 
 # game_start list
-'''game=[[0,0,2,0],[0,0,0,0],[0,2,0,0],[0,0,0,0]]'''
+'''game = [[0,0,2,0],[0,0,0,0],[0,2,0,0],[0,0,0,0]]'''
 
 # game_model list
-game=[[8192,4096,2048,1024],[512,256,128,0],[64,32,16,0],[8,4,2,0]]
+game = [[8192,4096,2048,1024],[512,256,128,0],[64,32,16,0],[8,4,2,0]]
 
 
 # dictionary of colors
-colors={0:"#CCCCCC",
+colors = {0:"#CCCCCC",
         2:"#9FC5F8",
         4:"#597EAA",
         8:"#085394",
@@ -39,10 +39,10 @@ labels=[[None,None,None,None],[None,None,None,None],[None,None,None,None],[None,
 
 
 # horizontal distance between labels
-dx=104
+dx = 104
 
 # vertical distance between labels
-dy=97
+dy = 97
 
 # horizontal beginning of the labels
 x0_labels = 195
