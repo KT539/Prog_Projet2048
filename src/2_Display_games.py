@@ -1,7 +1,7 @@
 # Project: Prog_Projet2048
-# Title: 2_Display_game1
+# Title: 2_Display_games
 # Author: Kilian Testard
-# Version: 1.0 21.01.2025
+# Version: 1.0 28.01.2025
 
 
 from tkinter import *
