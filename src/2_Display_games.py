@@ -4,6 +4,7 @@
 # Version: 1.0 28.01.2025
 
 
+import tkinter as tk
 from tkinter import *
 
 
@@ -48,7 +49,7 @@ dy = 97
 x0_labels = 195
 
 # vertical beginning of the labels
-y0_labels = 130
+y0_labels = 175
 
 # horizontal beginning of the title
 x0_title = 115
@@ -56,15 +57,32 @@ x0_title = 115
 # vertical beginning of the title
 y0_title = 0
 
+# horizontal beginning of the score display
+x0_score = 215
+
+# vertical beginning of the score display
+y0_score = 125
+
+# horizontal beginning of the new game button
+x0_btn = 475
+
+# vertical beginning of the new game button
+y0_btn = 115
 
 # creating the window
-win = Tk()
+win = tk.Tk()
 win.geometry("800x600")
 
 
 # title
-(Label(text="8192",width=25, height=3,  font=("Arial", 30)).place(x=x0_title, y=y0_title))
+Label(text="8192", width=25, height=3, font=("Arial", 30)).place(x=x0_title, y=y0_title)
 
+# best score display
+Label(text="Score : 0000", width= 10, height=1, font=("Arial", 15)).place(x=x0_score, y=y0_score)
+
+# start a new game button
+btn_newGame = tk.Button(win, text="New game", width=10, height=1, font=("Arial", 15)) # add argument command=def_start_new_game
+btn_newGame.place(x=x0_btn, y=y0_btn)
 
 # display game values
 def display():
