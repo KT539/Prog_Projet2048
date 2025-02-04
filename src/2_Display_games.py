@@ -82,7 +82,7 @@ for line in range(len(game0)):
         # creation without placement
         labels[line][col] = Label (win, text =game0[line][col], width=9, height=4, borderwidth=1, relief="solid", font=("Arial", 15), bg="#FFFFFF",)
         # label positioning in the windows
-        (labels[line][col].place(x=x0_labels + dx * col, y=y0_labels + dy * line))
+        labels[line][col].place(x=x0_labels + dx * col, y=y0_labels + dy * line)
 
 
 display()
