@@ -30,4 +30,4 @@ def pack4(a, b, c, d):
     return [a, b, c, d,fusion]
 
 
-print(pack4(0,0,0,2)[:4], "Nombre de fusions effectuées : ", pack4(0,0,0,2)[4])
+print(pack4(2,2,4,0)[:4], "Nombre de fusions effectuées : ", pack4(2,2,4,0)[4])
