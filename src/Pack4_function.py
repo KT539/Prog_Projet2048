@@ -1,3 +1,9 @@
+# Project: Prog_Projet2048
+# Title: Pack4_function
+# Author: Kilian Testard
+# Version: 1.0 04.02.2025
+
+# function to pack any set of values in any direction
 def pack4(a, b, c, d):
     fusion = 0
     if c == 0:
@@ -29,5 +35,5 @@ def pack4(a, b, c, d):
         fusion += 1
     return [a, b, c, d,fusion]
 
-
-print(pack4(2,2,4,0)[:4], "Nombre de fusions effectuées : ", pack4(2,2,4,0)[4])
+# print the results and counts the amount of fusions that occurred
+print(pack4(16,16,2,2)[:4], "Nombre de fusions effectuées : ", pack4(16,16,2,2)[4])

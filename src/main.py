@@ -1,11 +1,58 @@
 # Project: Prog_Projet2048
-# Title: 2_Display_games
+# Title: main
 # Author: Kilian Testard
-# Version: 1.0 28.01.2025
-
+# Version: 1.0 11.02.2025
 
 import tkinter as tk
 from tkinter import *
+from src.Pack4_function import *
+
+
+# function to pack a set of values downward and display the new values
+def move_down():
+    total_move = 0
+    for col in range(4):
+        [game[3][col], game[2][col], game[1][col], game[0][col], nb_move] = pack4(game[3][col], game[2][col], game[1][col], game[0][col])
+        total_move += nb_move
+    display()
+
+# function to pack a set of values upward and display the new values
+def move_up():
+    total_move = 0
+    for col in range(4):
+        [game[0][col], game[1][col], game[2][col], game[3][col], nb_move] = pack4(game[0][col], game[0][col], game[2][col], game[3][col])
+        total_move += nb_move
+    display()
+
+# function to pack a set of values leftward and display the new values
+def move_left():
+    total_move = 0
+    for line in range(4):
+        [game[line][0], game[line][1], game[line][2], game[line][3], nb_move] = pack4(game[line][0], game[line][1], game[line][2], game[line][3])
+        total_move += nb_move
+    display()
+
+# function to pack a set of values rightward and display the new values
+def move_right():
+    total_move = 0
+    for line in range(4):
+        [game[line][3], game[line][2], game[line][1], game[line][0], nb_move] = pack4(game[line][3], game[line][2], game[line][1], game[line][0])
+        total_move += nb_move
+    display()
+
+
+# function to handle key press events and trigger corresponding movements
+def key_pressed(event) :
+    # get the key symbol
+    touche=event.keysym
+    if (touche=="Right" or touche=="d" or touche=="D"):
+        move_right()
+    if (touche=="Left" or touche=="a" or touche=="A"):
+        move_left()
+    if (touche=="Up" or touche=="w" or touche=="W"):
+        move_up()
+    if (touche=="Down" or touche=="s" or touche=="S"):
+        move_down()
 
 
 # empty list to create the labels at 0
@@ -15,7 +62,8 @@ game0 = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
 '''game = [[0,0,2,0],[0,0,0,0],[0,2,0,0],[0,0,0,0]]'''
 
 # game_model list
-game = [[8192,4096,2048,1024],[512,256,128,0],[64,32,16,0],[8,4,2,0]]
+game = [[0,0,0,2],[4,4,2,2],[2,4,8,16],[2,0,8,16]]
+#[[8192,4096,2048,1024],[512,256,128,0],[64,32,16,0],[8,4,2,0]]
 
 
 # dictionary of colors
@@ -103,5 +151,6 @@ for line in range(len(game0)):
         labels[line][col].place(x=x0_labels + dx * col, y=y0_labels + dy * line)
 
 
+win.bind('<Key>', key_pressed)
 display()
 win.mainloop()
