@@ -14,14 +14,16 @@ def move_down():
     for col in range(4):
         [game[3][col], game[2][col], game[1][col], game[0][col], nb_move] = pack4(game[3][col], game[2][col], game[1][col], game[0][col])
         total_move += nb_move
+    print(total_move)
     display()
 
 # function to pack a set of values upward and display the new values
 def move_up():
     total_move = 0
     for col in range(4):
-        [game[0][col], game[1][col], game[2][col], game[3][col], nb_move] = pack4(game[0][col], game[0][col], game[2][col], game[3][col])
+        [game[0][col], game[1][col], game[2][col], game[3][col], nb_move] = pack4(game[0][col], game[1][col], game[2][col], game[3][col])
         total_move += nb_move
+    print(total_move)
     display()
 
 # function to pack a set of values leftward and display the new values
@@ -30,6 +32,7 @@ def move_left():
     for line in range(4):
         [game[line][0], game[line][1], game[line][2], game[line][3], nb_move] = pack4(game[line][0], game[line][1], game[line][2], game[line][3])
         total_move += nb_move
+    print(total_move)
     display()
 
 # function to pack a set of values rightward and display the new values
@@ -38,6 +41,7 @@ def move_right():
     for line in range(4):
         [game[line][3], game[line][2], game[line][1], game[line][0], nb_move] = pack4(game[line][3], game[line][2], game[line][1], game[line][0])
         total_move += nb_move
+    print(total_move)
     display()
 
 
@@ -55,15 +59,17 @@ def key_pressed(event) :
         move_down()
 
 
-# empty list to create the labels at 0
+# empty set of values to create the labels at 0
 game0 = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
 
-# game_start list
+# set of values simulating a game in starting position
 '''game = [[0,0,2,0],[0,0,0,0],[0,2,0,0],[0,0,0,0]]'''
 
-# game_model list
+# set of values for demo purposes
 game = [[0,0,0,2],[4,4,2,2],[2,4,8,16],[2,0,8,16]]
-#[[8192,4096,2048,1024],[512,256,128,0],[64,32,16,0],[8,4,2,0]]
+
+# set of values displaying every possible value
+'''game = [[8192,4096,2048,1024],[512,256,128,0],[64,32,16,0],[8,4,2,0]]'''
 
 
 # dictionary of colors
