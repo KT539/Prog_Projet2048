@@ -7,6 +7,7 @@
 # function to pack any set of values in any direction
 def pack4(a, b, c, d, score):
     nb_fusion = 0
+    # pack the values in one direction
     if c == 0:
         c, d = d, 0
         if c != 0:
@@ -19,6 +20,7 @@ def pack4(a, b, c, d, score):
         a, b, c, d = b, c, d, 0
         if a != 0:
             nb_fusion += 1
+    # pack two identical values together, add the fusion to the score
     if a == b and a != 0:
         a = 2 * a
         b = c
@@ -37,9 +39,8 @@ def pack4(a, b, c, d, score):
         d = 0
         nb_fusion += 1
         score += c
+    # return the new values
     return [a, b, c, d,nb_fusion, score]
 
 # print the results and counts the amount of fusions that occurred
 # print(pack4(16,16,2,2)[:4], "Nombre de fusions effectuées : ", pack4(16,16,2,2)[4])
-
-# COMMENTAIRES A AJOUTER

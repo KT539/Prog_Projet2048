@@ -111,6 +111,7 @@ def gen_new_tile():
 # set the base values at 0
 game = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
 
+# set the base score at 0
 score = 0
 
 
@@ -170,10 +171,10 @@ win = tk.Tk()
 win.geometry("800x600")
 
 
-# title
+# title label
 Label(text="8192", width=25, height=3, font=("Arial", 30)).place(x=x0_title, y=y0_title)
 
-# display the current score
+# score label
 label_score = Label(text="Score : 0000", width= 10, height=1, font=("Arial", 15))
 label_score.place(x=x0_score, y=y0_score)
 
@@ -191,6 +192,7 @@ def display():
                 labels[line][col].config(text=game[line][col], bg=colors[game[line][col]])
             else:
                 labels[line][col].config(text="", bg=colors[game[line][col]])
+    # update the displayed score
     label_score.config(text="Score = " + str(score))
 
 
