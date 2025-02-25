@@ -42,5 +42,5 @@ def pack4(a, b, c, d, score):
     # return the new values
     return [a, b, c, d,nb_fusion, score]
 
-# print the results and counts the amount of fusions that occurred
+# print the results and count the total amount of fusions that occurred
 # print(pack4(16,16,2,2)[:4], "Nombre de fusions effectuées : ", pack4(16,16,2,2)[4])

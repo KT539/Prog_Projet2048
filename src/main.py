@@ -143,7 +143,7 @@ dx = 104
 dy = 97
 
 # horizontal beginning of the labels
-x0_labels = 195
+x0_labels = 190
 
 # vertical beginning of the labels
 y0_labels = 175
@@ -155,13 +155,13 @@ x0_title = 115
 y0_title = 0
 
 # horizontal beginning of the score display
-x0_score = 215
+x0_score = 200
 
 # vertical beginning of the score display
 y0_score = 125
 
 # horizontal beginning of the new game button
-x0_btn = 470
+x0_btn = 485
 
 # vertical beginning of the new game button
 y0_btn = 115
