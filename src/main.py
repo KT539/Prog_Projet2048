@@ -3,29 +3,36 @@
 # Author: Kilian Testard
 # Version: 0.2 11.02.2025
 
+
 import tkinter as tk
 from tkinter import *
 from src.Pack4_function import *
 import random
 
 
-# function to start a game, by generating two random tiles and resetting the score
+# function to start a new game
 def start_game():
+    global score
+    # reset the values of every tile to 0
     for line in range(len(game)):
         for col in range(len(game[line])):
             if game[line][col] > 0:
                 game[line][col] = 0
+    # reset the score to 0
+    if score > 0:
+        score = 0
     display()
+    # generate two random tiles
     gen_new_tile()
     gen_new_tile()
-    # set score to 0
 
 
 # function to pack a set of values downward and display the new values
 def move_down():
     total_move = 0
+    global score
     for col in range(4):
-        [game[3][col], game[2][col], game[1][col], game[0][col], nb_move] = pack4(game[3][col], game[2][col], game[1][col], game[0][col])
+        [game[3][col], game[2][col], game[1][col], game[0][col], nb_move, score] = pack4(game[3][col], game[2][col], game[1][col], game[0][col], score)
         total_move += nb_move
     print(total_move)
     if total_move > 0:
@@ -35,8 +42,9 @@ def move_down():
 # function to pack a set of values upward and display the new values
 def move_up():
     total_move = 0
+    global score
     for col in range(4):
-        [game[0][col], game[1][col], game[2][col], game[3][col], nb_move] = pack4(game[0][col], game[1][col], game[2][col], game[3][col])
+        [game[0][col], game[1][col], game[2][col], game[3][col], nb_move, score] = pack4(game[0][col], game[1][col], game[2][col], game[3][col], score)
         total_move += nb_move
     print(total_move)
     if total_move > 0:
@@ -46,8 +54,9 @@ def move_up():
 # function to pack a set of values leftward and display the new values
 def move_left():
     total_move = 0
+    global score
     for line in range(4):
-        [game[line][0], game[line][1], game[line][2], game[line][3], nb_move] = pack4(game[line][0], game[line][1], game[line][2], game[line][3])
+        [game[line][0], game[line][1], game[line][2], game[line][3], nb_move, score] = pack4(game[line][0], game[line][1], game[line][2], game[line][3], score)
         total_move += nb_move
     print(total_move)
     if total_move > 0:
@@ -57,8 +66,9 @@ def move_left():
 # function to pack a set of values rightward and display the new values
 def move_right():
     total_move = 0
+    global score
     for line in range(4):
-        [game[line][3], game[line][2], game[line][1], game[line][0], nb_move] = pack4(game[line][3], game[line][2], game[line][1], game[line][0])
+        [game[line][3], game[line][2], game[line][1], game[line][0], nb_move, score] = pack4(game[line][3], game[line][2], game[line][1], game[line][0], score)
         total_move += nb_move
     print(total_move)
     if total_move > 0:
@@ -83,8 +93,8 @@ def key_pressed(event) :
 def gen_new_tile():
     # create a list with every empty tiles
     empty_tiles = []
-    # create a list of new values with 90% of 2 and 10% of 4
-    new_values = [2,2,2,2,2,2,2,2,2,4]
+    # create a list of new values with 80% of 2 and 20% of 4
+    new_values = [2,2,2,2,2,2,2,2,4,4]
     for line in range(len(game)):
         for col in range(len(game[line])):
             if game[line][col] == 0:
@@ -98,8 +108,10 @@ def gen_new_tile():
     display()
 
 
-# set the labels values at 0
+# set the base values at 0
 game = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+
+score = 0
 
 
 # dictionary of colors
@@ -148,7 +160,7 @@ x0_score = 215
 y0_score = 125
 
 # horizontal beginning of the new game button
-x0_btn = 475
+x0_btn = 470
 
 # vertical beginning of the new game button
 y0_btn = 115
@@ -162,20 +174,24 @@ win.geometry("800x600")
 Label(text="8192", width=25, height=3, font=("Arial", 30)).place(x=x0_title, y=y0_title)
 
 # display the current score
-Label(text="Score : 0000", width= 10, height=1, font=("Arial", 15)).place(x=x0_score, y=y0_score)
+label_score = Label(text="Score : 0000", width= 10, height=1, font=("Arial", 15))
+label_score.place(x=x0_score, y=y0_score)
 
 # button to start a new game
 btn_newGame = tk.Button(win, text="New game", width=10, height=1, font=("Arial", 15), command=start_game)
 btn_newGame.place(x=x0_btn, y=y0_btn)
 
+
 # display game values
 def display():
+    global score
     for line in range(len(game)):
         for col in range(len(game[line])):
             if game[line][col]>0:
                 labels[line][col].config(text=game[line][col], bg=colors[game[line][col]])
             else:
                 labels[line][col].config(text="", bg=colors[game[line][col]])
+    label_score.config(text="Score = " + str(score))
 
 
 # labels creation and positioning
