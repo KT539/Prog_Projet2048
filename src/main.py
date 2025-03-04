@@ -1,11 +1,12 @@
 # Project: Prog_Projet2048
 # Title: main
 # Author: Kilian Testard
-# Version: 0.2 11.02.2025
+# Version: 0.3 04.03.2025
 
 
 import tkinter as tk
 from tkinter import *
+from tkinter import messagebox
 from src.Pack4_function import *
 import random
 
@@ -27,6 +28,65 @@ def start_game():
     gen_new_tile()
 
 
+# function to check if the game is won
+def win_check():
+    global win_status
+    for line in range(len(game)):
+        for col in range(len(game[line])):
+            # flag trigger the first time a tile reaches 2048
+            if game[line][col] == 2048 and win_status == False:
+                win_status = True
+                display()
+                win_player_input()
+
+
+# messagebox if the game is won
+def win_player_input():
+    input = messagebox.askquestion(title=None, message="You won ! Do you want to keep playing ?")
+    if input == "yes":
+        pass
+    if input == "no":
+        start_game()
+
+
+# function to check if the game is lost
+def loss_check():
+    # create a list with every empty tiles
+    empty_tiles = []
+    for line in range(len(game)):
+        for col in range(len(game[line])):
+            if game[line][col] == 0:
+                empty_tiles.append([line, col])
+
+    # if the board is full, check for adjacent identical tiles
+    if len(empty_tiles) == 0:
+        line_fusion=False
+        col_fusion=False
+        for line in range(len(game)-1):
+            for col in range(len(game[line])):
+                if game[line][col] == game[line+1][col] :
+                    line_fusion=True
+
+        for line in range(len(game)):
+            for col in range(len(game[line])-1):
+                if game[line][col] == game[line][col + 1]:
+                     col_fusion=True
+
+        # if there are no adjacent identical tiles, triggers loss_player_input
+        if line_fusion==False and col_fusion==False:
+            display()
+            loss_player_input()
+
+
+# messagebox if the game is lost
+def loss_player_input():
+    input = messagebox.askquestion(title=None, message="You lost ! Do you want to start a new game ?")
+    if input == "yes":
+        start_game()
+    if input == "no":
+        quit()
+
+
 # function to pack a set of values downward and display the new values
 def move_down():
     total_move = 0
@@ -38,6 +98,8 @@ def move_down():
     if total_move > 0:
         gen_new_tile()
     display()
+    win_check()
+
 
 # function to pack a set of values upward and display the new values
 def move_up():
@@ -50,6 +112,8 @@ def move_up():
     if total_move > 0:
         gen_new_tile()
     display()
+    win_check()
+
 
 # function to pack a set of values leftward and display the new values
 def move_left():
@@ -62,6 +126,8 @@ def move_left():
     if total_move > 0:
         gen_new_tile()
     display()
+    win_check()
+
 
 # function to pack a set of values rightward and display the new values
 def move_right():
@@ -74,6 +140,7 @@ def move_right():
     if total_move > 0:
         gen_new_tile()
     display()
+    win_check()
 
 
 # function to handle key press events and trigger corresponding movements
@@ -88,6 +155,8 @@ def key_pressed(event) :
         move_up()
     if (touche=="Down" or touche=="s" or touche=="S"):
         move_down()
+    if (touche=="q" or touche=="Q"):
+        quit()
 
 
 def gen_new_tile():
@@ -106,6 +175,7 @@ def gen_new_tile():
         print(new_tile)
         game[new_tile[0]][new_tile[1]] = random.choice(new_values)
     display()
+    loss_check()
 
 
 # set the base values at 0
@@ -113,6 +183,9 @@ game = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
 
 # set the base score at 0
 score = 0
+
+# set the default win status as false
+win_status = False
 
 
 # dictionary of colors
@@ -149,13 +222,13 @@ x0_labels = 190
 y0_labels = 175
 
 # horizontal beginning of the title
-x0_title = 115
+x0_title = 105
 
 # vertical beginning of the title
 y0_title = 0
 
 # horizontal beginning of the score display
-x0_score = 200
+x0_score = 135
 
 # vertical beginning of the score display
 y0_score = 125
@@ -172,10 +245,10 @@ win.geometry("800x600")
 
 
 # title label
-Label(text="8192", width=25, height=3, font=("Arial", 30)).place(x=x0_title, y=y0_title)
+Label(text="2048", width=25, height=3, font=("Arial", 30)).place(x=x0_title, y=y0_title)
 
 # score label
-label_score = Label(text="Score : 0000", width= 10, height=1, font=("Arial", 15))
+label_score = Label(text="Score : 0000", width= 20, height=1, font=("Arial", 15))
 label_score.place(x=x0_score, y=y0_score)
 
 # button to start a new game
@@ -193,7 +266,7 @@ def display():
             else:
                 labels[line][col].config(text="", bg=colors[game[line][col]])
     # update the displayed score
-    label_score.config(text="Score = " + str(score))
+    label_score.config(text="Score : " + str(score))
 
 
 # labels creation and positioning

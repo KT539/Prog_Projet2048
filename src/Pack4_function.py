@@ -1,12 +1,14 @@
 # Project: Prog_Projet2048
 # Title: Pack4_function
 # Author: Kilian Testard
-# Version: 0.2 04.02.2025
+# Version: 0.3 04.03.2025
 
 
 # function to pack any set of values in any direction
 def pack4(a, b, c, d, score):
+    # base value for counting the fusions
     nb_fusion = 0
+
     # pack the values in one direction
     if c == 0:
         c, d = d, 0
@@ -20,6 +22,7 @@ def pack4(a, b, c, d, score):
         a, b, c, d = b, c, d, 0
         if a != 0:
             nb_fusion += 1
+
     # pack two identical values together, add the fusion to the score
     if a == b and a != 0:
         a = 2 * a
@@ -39,6 +42,7 @@ def pack4(a, b, c, d, score):
         d = 0
         nb_fusion += 1
         score += c
+
     # return the new values
     return [a, b, c, d,nb_fusion, score]
 
