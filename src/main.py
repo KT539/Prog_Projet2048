@@ -14,15 +14,12 @@ import random
 # function to start a new game
 def start_game():
     global score
+    global game
     # reset the values of every tile to 0
-    for line in range(len(game)):
-        for col in range(len(game[line])):
-            if game[line][col] > 0:
-                game[line][col] = 0
+    game = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
     # reset the score to 0
     if score > 0:
         score = 0
-    display()
     # generate two random tiles
     gen_new_tile()
     gen_new_tile()
@@ -36,7 +33,6 @@ def win_check():
             # flag trigger the first time a tile reaches 2048
             if game[line][col] == 2048 and win_status == False:
                 win_status = True
-                display()
                 win_player_input()
 
 
@@ -94,11 +90,7 @@ def move_down():
     for col in range(4):
         [game[3][col], game[2][col], game[1][col], game[0][col], nb_move, score] = pack4(game[3][col], game[2][col], game[1][col], game[0][col], score)
         total_move += nb_move
-    print(total_move)
-    if total_move > 0:
-        gen_new_tile()
-    display()
-    win_check()
+    return total_move
 
 
 # function to pack a set of values upward and display the new values
@@ -108,11 +100,7 @@ def move_up():
     for col in range(4):
         [game[0][col], game[1][col], game[2][col], game[3][col], nb_move, score] = pack4(game[0][col], game[1][col], game[2][col], game[3][col], score)
         total_move += nb_move
-    print(total_move)
-    if total_move > 0:
-        gen_new_tile()
-    display()
-    win_check()
+    return total_move
 
 
 # function to pack a set of values leftward and display the new values
@@ -122,11 +110,7 @@ def move_left():
     for line in range(4):
         [game[line][0], game[line][1], game[line][2], game[line][3], nb_move, score] = pack4(game[line][0], game[line][1], game[line][2], game[line][3], score)
         total_move += nb_move
-    print(total_move)
-    if total_move > 0:
-        gen_new_tile()
-    display()
-    win_check()
+    return total_move
 
 
 # function to pack a set of values rightward and display the new values
@@ -136,27 +120,28 @@ def move_right():
     for line in range(4):
         [game[line][3], game[line][2], game[line][1], game[line][0], nb_move, score] = pack4(game[line][3], game[line][2], game[line][1], game[line][0], score)
         total_move += nb_move
-    print(total_move)
-    if total_move > 0:
-        gen_new_tile()
-    display()
-    win_check()
+    return total_move
 
 
 # function to handle key press events and trigger corresponding movements
 def key_pressed(event) :
+    total_move = 0
     # get the key symbol
     touche=event.keysym
     if (touche=="Right" or touche=="d" or touche=="D"):
-        move_right()
+        total_move = move_right()
     if (touche=="Left" or touche=="a" or touche=="A"):
-        move_left()
+        total_move = move_left()
     if (touche=="Up" or touche=="w" or touche=="W"):
-        move_up()
+        total_move = move_up()
     if (touche=="Down" or touche=="s" or touche=="S"):
-        move_down()
+        total_move = move_down()
     if (touche=="q" or touche=="Q"):
         quit()
+    if total_move > 0:
+        gen_new_tile()
+    display()
+    win_check()
 
 
 def gen_new_tile():
@@ -280,5 +265,4 @@ for line in range(len(game)):
 
 start_game()
 win.bind('<Key>', key_pressed)
-display()
 win.mainloop()
