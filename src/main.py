@@ -1,7 +1,7 @@
 # Project: Prog_Projet2048
 # Title: main
 # Author: Kilian Testard
-# Version: 0.3 04.03.2025
+# Version: 0.4 11.03.2025
 
 
 import tkinter as tk
@@ -9,6 +9,7 @@ from tkinter import *
 from tkinter import messagebox
 from src.Pack4_function import *
 import random
+import copy
 
 
 # function to start a new game
@@ -35,7 +36,6 @@ def update_timer():
     minutes = str((time_count % 3600) // 60).zfill(2)
     seconds = str(time_count % 60).zfill(2) # found on an Internet forum
     label_timer.config(text=f"Timer : {hours}:{minutes}:{seconds}")
-
     # update the timer after every second
     win.after(1000, update_timer)
 
@@ -68,7 +68,6 @@ def loss_check():
         for col in range(len(game[line])):
             if game[line][col] == 0:
                 empty_tiles.append([line, col])
-
     # if the board is full, check for adjacent identical tiles
     if len(empty_tiles) == 0:
         line_fusion=False
@@ -77,12 +76,10 @@ def loss_check():
             for col in range(len(game[line])):
                 if game[line][col] == game[line+1][col] :
                     line_fusion=True
-
         for line in range(len(game)):
             for col in range(len(game[line])-1):
                 if game[line][col] == game[line][col + 1]:
                      col_fusion=True
-
         # if there are no adjacent identical tiles, triggers loss_player_input
         if line_fusion==False and col_fusion==False:
             display()
@@ -98,7 +95,7 @@ def loss_player_input():
         quit()
 
 
-# function to pack a set of values downward and display the new values
+# function to pack a set of values downward and return the total amount of moves that occurred
 def move_down():
     total_move = 0
     global score
@@ -108,7 +105,7 @@ def move_down():
     return total_move
 
 
-# function to pack a set of values upward and display the new values
+# function to pack a set of values upward and return the total amount of moves that occurred
 def move_up():
     total_move = 0
     global score
@@ -118,7 +115,7 @@ def move_up():
     return total_move
 
 
-# function to pack a set of values leftward and display the new values
+# function to pack a set of values leftward and return the total amount of moves that occurred
 def move_left():
     total_move = 0
     global score
@@ -128,7 +125,7 @@ def move_left():
     return total_move
 
 
-# function to pack a set of values rightward and display the new values
+# function to pack a set of values rightward and return the total amount of moves that occurred
 def move_right():
     total_move = 0
     global score
@@ -140,16 +137,21 @@ def move_right():
 
 # function to handle key press events and trigger corresponding movements
 def key_pressed(event) :
+    global game_state
     total_move = 0
     # get the key symbol
     touche=event.keysym
     if (touche=="Right" or touche=="d" or touche=="D"):
+        memorize_game_state()
         total_move = move_right()
     if (touche=="Left" or touche=="a" or touche=="A"):
+        memorize_game_state()
         total_move = move_left()
     if (touche=="Up" or touche=="w" or touche=="W"):
+        memorize_game_state()
         total_move = move_up()
     if (touche=="Down" or touche=="s" or touche=="S"):
+        memorize_game_state()
         total_move = move_down()
     if (touche=="q" or touche=="Q"):
         quit()
@@ -178,6 +180,26 @@ def gen_new_tile():
     loss_check()
 
 
+# function to memorize the state of the game
+def memorize_game_state():
+    global game_state
+    game_state.clear()
+    game_state.append(copy.deepcopy(game))
+    game_state.append(score)
+    game_state.append(win_status)
+
+
+# function to roll back to the memorized game state
+def undo():
+    global game
+    global score
+    global win_status
+    game = game_state[0]
+    score = game_state[1]
+    win_status = game_state[2]
+    display()
+
+
 # set the base values at 0
 game = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
 
@@ -189,6 +211,9 @@ win_status = False
 
 # set the timer to 0
 time_count = 0
+
+# memory of the game state
+game_state = []
 
 
 # dictionary of colors
@@ -254,6 +279,7 @@ x0_btn_ud = 400
 # vertical beginning of the undo button
 y0_btn_ud = 125
 
+
 # creating the window
 win = tk.Tk()
 win.geometry("800x650")
@@ -275,7 +301,7 @@ btn_newGame = tk.Button(win, text="New game", width=10, height=1, font=("Arial",
 btn_newGame.place(x=x0_btn_ng, y=y0_btn_ng)
 
 # button to undo the last move
-btn_undo = tk.Button(win, text="Undo", width=5, height=1, font=("Arial", 15), command=start_game)
+btn_undo = tk.Button(win, text="Undo", width=5, height=1, font=("Arial", 15), command=undo)
 btn_undo.place(x=x0_btn_ud, y=y0_btn_ud)
 
 

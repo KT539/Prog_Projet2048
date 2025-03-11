@@ -1,7 +1,7 @@
 # Project: Prog_Projet2048
 # Title: Pack4_function
 # Author: Kilian Testard
-# Version: 0.3 04.03.2025
+# Version: 0.4 11.03.2025
 
 
 # function to pack any set of values in any direction
