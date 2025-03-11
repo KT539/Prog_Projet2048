@@ -15,14 +15,29 @@ import random
 def start_game():
     global score
     global game
+    global time_count
     # reset the values of every tile to 0
     game = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
     # reset the score to 0
-    if score > 0:
-        score = 0
+    score = 0
+    # reset the timer
+    time_count = 0
     # generate two random tiles
     gen_new_tile()
     gen_new_tile()
+
+
+# function to update the timer every second
+def update_timer():
+    global time_count
+    time_count += 1
+    hours = str(time_count // 3600).zfill(2)
+    minutes = str((time_count % 3600) // 60).zfill(2)
+    seconds = str(time_count % 60).zfill(2) # found on an Internet forum
+    label_timer.config(text=f"Timer : {hours}:{minutes}:{seconds}")
+
+    # update the timer after every second
+    win.after(1000, update_timer)
 
 
 # function to check if the game is won
@@ -138,9 +153,9 @@ def key_pressed(event) :
         total_move = move_down()
     if (touche=="q" or touche=="Q"):
         quit()
+    # if the tiles moved, generate a new random one
     if total_move > 0:
         gen_new_tile()
-    display()
     win_check()
 
 
@@ -171,6 +186,9 @@ score = 0
 
 # set the default win status as false
 win_status = False
+
+# set the timer to 0
+time_count = 0
 
 
 # dictionary of colors
@@ -216,17 +234,29 @@ y0_title = 0
 x0_score = 135
 
 # vertical beginning of the score display
-y0_score = 125
+y0_score = 145
+
+# horizontal beginning of the timer
+x0_timer = 305
+
+# vertical beginning of the timer
+y0_timer = 575
 
 # horizontal beginning of the new game button
-x0_btn = 485
+x0_btn_ng = 485
 
 # vertical beginning of the new game button
-y0_btn = 115
+y0_btn_ng = 125
+
+# horizontal beginning of the undo button
+x0_btn_ud = 400
+
+# vertical beginning of the undo button
+y0_btn_ud = 125
 
 # creating the window
 win = tk.Tk()
-win.geometry("800x600")
+win.geometry("800x650")
 
 
 # title label
@@ -236,9 +266,17 @@ Label(text="2048", width=25, height=3, font=("Arial", 30)).place(x=x0_title, y=y
 label_score = Label(text="Score : 0000", width= 20, height=1, font=("Arial", 15))
 label_score.place(x=x0_score, y=y0_score)
 
+# timer label
+label_timer = Label(text="Timer : 0000", width= 20, height=1, font=("Arial", 12))
+label_timer.place(x=x0_timer, y=y0_timer)
+
 # button to start a new game
 btn_newGame = tk.Button(win, text="New game", width=10, height=1, font=("Arial", 15), command=start_game)
-btn_newGame.place(x=x0_btn, y=y0_btn)
+btn_newGame.place(x=x0_btn_ng, y=y0_btn_ng)
+
+# button to undo the last move
+btn_undo = tk.Button(win, text="Undo", width=5, height=1, font=("Arial", 15), command=start_game)
+btn_undo.place(x=x0_btn_ud, y=y0_btn_ud)
 
 
 # display game values
@@ -264,5 +302,6 @@ for line in range(len(game)):
 
 
 start_game()
+update_timer()
 win.bind('<Key>', key_pressed)
 win.mainloop()
