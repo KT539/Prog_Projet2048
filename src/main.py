@@ -215,7 +215,6 @@ time_count = 0
 # memory of the game state
 game_state = []
 
-
 # dictionary of colors
 colors = {0:"#CCCCCC",
         2:"#9FC5F8",
@@ -232,10 +231,8 @@ colors = {0:"#CCCCCC",
         4096:"#990000",
         8192:"#F1C232"}
 
-
 # empty labels list
 labels=[[None,None,None,None],[None,None,None,None],[None,None,None,None],[None,None,None,None]]
-
 
 # horizontal distance between labels
 dx = 104
@@ -250,19 +247,19 @@ x0_labels = 190
 y0_labels = 175
 
 # horizontal beginning of the title
-x0_title = 105
+x0_title = 335
 
 # vertical beginning of the title
-y0_title = 0
+y0_title = 45
 
 # horizontal beginning of the score display
-x0_score = 135
+x0_score = 191
 
 # vertical beginning of the score display
-y0_score = 145
+y0_score = 135
 
 # horizontal beginning of the timer
-x0_timer = 305
+x0_timer = 327
 
 # vertical beginning of the timer
 y0_timer = 575
@@ -279,21 +276,27 @@ x0_btn_ud = 400
 # vertical beginning of the undo button
 y0_btn_ud = 125
 
-
 # creating the window
 win = tk.Tk()
 win.geometry("800x650")
 
+# image file
+bg_image = PhotoImage(file=r"C:\\Dev\\Trimestre3\\MA20\\Projet_2048\\Prog_Projet2048\\2048_bg_image.png")
+
+# background label
+label_bg = Label(win, image=bg_image)
+label_bg.place(x=0, y=0, relwidth=1, relheight=1)
 
 # title label
-Label(text="2048", width=25, height=3, font=("Arial", 30)).place(x=x0_title, y=y0_title)
+label_title = (Label(text="2048", width=5, height=1, font=("Arial", 30)))
+label_title.place(x=x0_title, y=y0_title)
 
 # score label
-label_score = Label(text="Score : 0000", width= 20, height=1, font=("Arial", 15))
+label_score = Label(text="Score : 0000", width= 15, height=1, font=("Arial", 15))
 label_score.place(x=x0_score, y=y0_score)
 
 # timer label
-label_timer = Label(text="Timer : 0000", width= 20, height=1, font=("Arial", 12))
+label_timer = Label(text="Timer : 0000", width= 15, height=1, font=("Arial", 12))
 label_timer.place(x=x0_timer, y=y0_timer)
 
 # button to start a new game
