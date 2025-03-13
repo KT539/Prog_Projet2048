@@ -18,7 +18,7 @@ def start_game():
     global game
     global time_count
     # reset the values of every tile to 0
-    game = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+    game = [[0,2,4,8],[16,32,64,128],[256,512,1024,2048],[4096,8192,0,0]]
     # reset the score to 0
     score = 0
     # reset the timer
@@ -216,20 +216,20 @@ time_count = 0
 game_state = []
 
 # dictionary of colors
-colors = {0:"#CCCCCC",
-        2:"#9FC5F8",
-        4:"#597EAA",
-        8:"#085394",
-        16:"#B4A7D6",
-        32:"#8E7CC3",
-        64:"#674EA7",
-        128:"#D5A6BD",
-        256:"#C27BA0",
-        512:"#A64D79",
-        1024:"#E06666",
-        2048:"#CC0000",
-        4096:"#990000",
-        8192:"#F1C232"}
+colors = {0:"#FFFFFF",
+        2:"#D3D3D3",
+        4:"#A9A9A9",
+        8:"#808080",
+        16:"#6D6D6D",
+        32:"#595959",
+        64:"#484848",
+        128:"#3D3D3D",
+        256:"#2E2E2E",
+        512:"#C08D8D",
+        1024:"#9E4A4A",
+        2048:"#7A2828",
+        4096:"#5C1010",
+        8192:"#3E0000"}
 
 # empty labels list
 labels=[[None,None,None,None],[None,None,None,None],[None,None,None,None],[None,None,None,None]]
@@ -259,7 +259,7 @@ x0_score = 191
 y0_score = 135
 
 # horizontal beginning of the timer
-x0_timer = 327
+x0_timer = 328
 
 # vertical beginning of the timer
 y0_timer = 575
