@@ -43,17 +43,29 @@ def init_6x6():
     clear_labels()
     labels = [[None for _ in range(grid_size)] for _ in range(grid_size)]
     game = [[0 for _ in range(grid_size)] for _ in range(grid_size)]
+    label_title.place(x=x0_title + 105, y=y0_title)
+    label_timer.place(x=x0_timer + 105, y=y0_timer + 200)
+    btn_newGame.place(x=x0_btn_ng + 209, y=y0_btn_ng)
+    btn_undo.place(x=x0_btn_ud + 209, y=y0_btn_ud)
+    btn_4x4.place(x=x0_btn_4x4 + 105, y=y0_btn_4x4 + 50)
+    btn_6x6.place(x=x0_btn_6x6 + 105, y=y0_btn_6x6 + 50)
     start_game()
 
 
 # function to switch to 4x4 mode
 def init_4x4():
     global game, labels, grid_size
-    win.geometry("800x625")
+    win.geometry("800x650")
     grid_size = 4
     clear_labels()
     labels = [[None for _ in range(grid_size)] for _ in range(grid_size)]
     game = [[0 for _ in range(grid_size)] for _ in range(grid_size)]
+    label_title.place(x=x0_title, y=y0_title)
+    label_timer.place(x=x0_timer, y=y0_timer)
+    btn_newGame.place(x=x0_btn_ng, y=y0_btn_ng)
+    btn_undo.place(x=x0_btn_ud, y=y0_btn_ud)
+    btn_4x4.place(x=x0_btn_4x4, y=y0_btn_4x4)
+    btn_6x6.place(x=x0_btn_6x6, y=y0_btn_6x6)
     start_game()
 
 
@@ -273,59 +285,32 @@ colors = {0:"#FFFFFF",
         8192:"#3E0000"}
 
 
-# horizontal distance between labels
-dx = 104
+# horizontal and vertical distance between labels
+dx, dy = 104, 97
 
-# vertical distance between labels
-dy = 97
+# horizontal and vertical beginning of the labels
+x0_labels, y0_labels = 190, 200
 
-# horizontal beginning of the labels
-x0_labels = 190
+# horizontal and vertical beginning of the title
+x0_title, y0_title = 335, 30
 
-# vertical beginning of the labels
-y0_labels = 175
+# horizontal and vertical beginning of the score display
+x0_score, y0_score = 191, 160
 
-# horizontal beginning of the title
-x0_title = 335
+# horizontal and vertical beginning of the timer
+x0_timer, y0_timer = 328, 600
 
-# vertical beginning of the title
-y0_title = 10
+# horizontal and vertical beginning of the new game button
+x0_btn_ng, y0_btn_ng = 485, 150
 
-# horizontal beginning of the score display
-x0_score = 191
+# horizontal and vertical beginning of the undo button
+x0_btn_ud, y0_btn_ud = 415, 150
 
-# vertical beginning of the score display
-y0_score = 135
+#horizontal and vertical beginning of the 4x4 button
+x0_btn_4x4, y0_btn_4x4 = 330, 100
 
-# horizontal beginning of the timer
-x0_timer = 328
-
-# vertical beginning of the timer
-y0_timer = 575
-
-# horizontal beginning of the new game button
-x0_btn_ng = 485
-
-# vertical beginning of the new game button
-y0_btn_ng = 125
-
-# horizontal beginning of the undo button
-x0_btn_ud = 415
-
-# vertical beginning of the undo button
-y0_btn_ud = 125
-
-#horizontal beginning of the 4x4 button
-x0_btn_4x4 = 330
-
-# vertical beginning of the 4x4 button
-y0_btn_4x4 = 75
-
-# horizontal beginning of the 6x6 button
-x0_btn_6x6 = 397
-
-# vertical beginning of the 6x6 button
-y0_btn_6x6 = 75
+# horizontal and vertical beginning of the 6x6 button
+x0_btn_6x6, y0_btn_6x6 = 397, 100
 
 # creating the window
 win = tk.Tk()
