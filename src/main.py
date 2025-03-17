@@ -3,7 +3,6 @@
 # Author: Kilian Testard
 # Version: 0.4 11.03.2025
 
-
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox
@@ -14,11 +13,19 @@ import copy
 
 # function to start a new game
 def start_game():
-    global score
-    global game
-    global time_count
+    global score, game, time_count
+    # labels creation and positioning
+    for line in range(len(game)):
+        for col in range(len(game[line])):
+            # creation without placement
+            labels[line][col] = Label(win, text=game[line][col], width=9, height=4, borderwidth=1, relief="solid", font=("Arial", 15), bg="#FFFFFF", )
+            # label positioning in the windows
+            labels[line][col].place(x=x0_labels + dx * col, y=y0_labels + dy * line)
     # reset the values of every tile to 0
-    game = [[0,2,4,8],[16,32,64,128],[256,512,1024,2048],[4096,8192,0,0]]
+    for line in range(len(game)):
+        for col in range(len(game[line])):
+            if game[line][col] > 0:
+                game[line][col] = 0
     # reset the score to 0
     score = 0
     # reset the timer
@@ -28,13 +35,43 @@ def start_game():
     gen_new_tile()
 
 
+# function to switch to 6x6 mode
+def init_6x6():
+    global game, labels, grid_size
+    win.geometry("1000x850")
+    grid_size = 6
+    clear_labels()
+    labels = [[None for _ in range(grid_size)] for _ in range(grid_size)]
+    game = [[0 for _ in range(grid_size)] for _ in range(grid_size)]
+    start_game()
+
+
+# function to switch to 4x4 mode
+def init_4x4():
+    global game, labels, grid_size
+    win.geometry("800x625")
+    grid_size = 4
+    clear_labels()
+    labels = [[None for _ in range(grid_size)] for _ in range(grid_size)]
+    game = [[0 for _ in range(grid_size)] for _ in range(grid_size)]
+    start_game()
+
+
+# function to clear the labels before a switch
+def clear_labels():
+    for col in labels:
+        for label in col:
+            if label :
+                label.destroy()
+
+
 # function to update the timer every second
 def update_timer():
     global time_count
     time_count += 1
     hours = str(time_count // 3600).zfill(2)
     minutes = str((time_count % 3600) // 60).zfill(2)
-    seconds = str(time_count % 60).zfill(2) # found on an Internet forum
+    seconds = str(time_count % 60).zfill(2)
     label_timer.config(text=f"Timer : {hours}:{minutes}:{seconds}")
     # update the timer after every second
     win.after(1000, update_timer)
@@ -43,8 +80,8 @@ def update_timer():
 # function to check if the game is won
 def win_check():
     global win_status
-    for line in range(len(game)):
-        for col in range(len(game[line])):
+    for line in range(grid_size):
+        for col in range(grid_size):
             # flag trigger the first time a tile reaches 2048
             if game[line][col] == 2048 and win_status == False:
                 win_status = True
@@ -64,20 +101,20 @@ def win_player_input():
 def loss_check():
     # create a list with every empty tiles
     empty_tiles = []
-    for line in range(len(game)):
-        for col in range(len(game[line])):
+    for line in range(grid_size):
+        for col in range(grid_size):
             if game[line][col] == 0:
                 empty_tiles.append([line, col])
     # if the board is full, check for adjacent identical tiles
     if len(empty_tiles) == 0:
         line_fusion=False
         col_fusion=False
-        for line in range(len(game)-1):
-            for col in range(len(game[line])):
+        for line in range(grid_size-1):
+            for col in range(grid_size):
                 if game[line][col] == game[line+1][col] :
                     line_fusion=True
-        for line in range(len(game)):
-            for col in range(len(game[line])-1):
+        for line in range(grid_size):
+            for col in range(grid_size-1):
                 if game[line][col] == game[line][col + 1]:
                      col_fusion=True
         # if there are no adjacent identical tiles, triggers loss_player_input
@@ -99,8 +136,8 @@ def loss_player_input():
 def move_down():
     total_move = 0
     global score
-    for col in range(4):
-        [game[3][col], game[2][col], game[1][col], game[0][col], nb_move, score] = pack4(game[3][col], game[2][col], game[1][col], game[0][col], score)
+    for col in range(grid_size):
+        [game[5][col], game[4][col], game[3][col], game[2][col], game[1][col], game[0][col], nb_move, score] = pack4(game[5][col], game[4][col], game[3][col], game[2][col], game[1][col], game[0][col], score)
         total_move += nb_move
     return total_move
 
@@ -109,8 +146,8 @@ def move_down():
 def move_up():
     total_move = 0
     global score
-    for col in range(4):
-        [game[0][col], game[1][col], game[2][col], game[3][col], nb_move, score] = pack4(game[0][col], game[1][col], game[2][col], game[3][col], score)
+    for col in range(grid_size):
+        [game[0][col], game[1][col], game[2][col], game[3][col], game[4][col], game[5][col], nb_move, score] = pack4(game[0][col], game[1][col], game[2][col], game[3][col], game[4][col], game[5][col], score)
         total_move += nb_move
     return total_move
 
@@ -119,8 +156,8 @@ def move_up():
 def move_left():
     total_move = 0
     global score
-    for line in range(4):
-        [game[line][0], game[line][1], game[line][2], game[line][3], nb_move, score] = pack4(game[line][0], game[line][1], game[line][2], game[line][3], score)
+    for line in range(grid_size):
+        [game[line][0], game[line][1], game[line][2], game[line][3], game[line][4], game[line][5], nb_move, score] = pack4(game[line][0], game[line][1], game[line][2], game[line][3], game[line][4], game[line][5], score)
         total_move += nb_move
     return total_move
 
@@ -129,8 +166,8 @@ def move_left():
 def move_right():
     total_move = 0
     global score
-    for line in range(4):
-        [game[line][3], game[line][2], game[line][1], game[line][0], nb_move, score] = pack4(game[line][3], game[line][2], game[line][1], game[line][0], score)
+    for line in range(grid_size):
+        [game[line][5], game[line][4], game[line][3], game[line][2], game[line][1], game[line][0], nb_move, score] = pack4(game[line][5], game[line][4], game[line][3], game[line][2], game[line][1], game[line][0], score)
         total_move += nb_move
     return total_move
 
@@ -166,8 +203,8 @@ def gen_new_tile():
     empty_tiles = []
     # create a list of new values with 80% of 2 and 20% of 4
     new_values = [2,2,2,2,2,2,2,2,4,4]
-    for line in range(len(game)):
-        for col in range(len(game[line])):
+    for line in range(grid_size):
+        for col in range(grid_size):
             if game[line][col] == 0:
                 empty_tiles.append([line, col])
     print(empty_tiles)
@@ -191,17 +228,21 @@ def memorize_game_state():
 
 # function to roll back to the memorized game state
 def undo():
-    global game
-    global score
-    global win_status
+    global game, score, win_status
     game = game_state[0]
     score = game_state[1]
     win_status = game_state[2]
     display()
 
 
+# set the base grid size
+grid_size = 4
+
 # set the base values at 0
-game = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+game = [[0 for _ in range(grid_size)] for _ in range(grid_size)]
+
+# define base labels
+labels = [[None for _ in range(grid_size)] for _ in range(grid_size)]
 
 # set the base score at 0
 score = 0
@@ -231,8 +272,6 @@ colors = {0:"#FFFFFF",
         4096:"#5C1010",
         8192:"#3E0000"}
 
-# empty labels list
-labels=[[None,None,None,None],[None,None,None,None],[None,None,None,None],[None,None,None,None]]
 
 # horizontal distance between labels
 dx = 104
@@ -250,7 +289,7 @@ y0_labels = 175
 x0_title = 335
 
 # vertical beginning of the title
-y0_title = 45
+y0_title = 10
 
 # horizontal beginning of the score display
 x0_score = 191
@@ -271,14 +310,26 @@ x0_btn_ng = 485
 y0_btn_ng = 125
 
 # horizontal beginning of the undo button
-x0_btn_ud = 400
+x0_btn_ud = 415
 
 # vertical beginning of the undo button
 y0_btn_ud = 125
 
+#horizontal beginning of the 4x4 button
+x0_btn_4x4 = 330
+
+# vertical beginning of the 4x4 button
+y0_btn_4x4 = 75
+
+# horizontal beginning of the 6x6 button
+x0_btn_6x6 = 397
+
+# vertical beginning of the 6x6 button
+y0_btn_6x6 = 75
+
 # creating the window
 win = tk.Tk()
-win.geometry("800x650")
+win.geometry("800x625")
 
 # image file
 bg_image = PhotoImage(file=r"C:\\Dev\\Trimestre3\\MA20\\Projet_2048\\Prog_Projet2048\\2048_bg_image.png")
@@ -288,24 +339,32 @@ label_bg = Label(win, image=bg_image)
 label_bg.place(x=0, y=0, relwidth=1, relheight=1)
 
 # title label
-label_title = (Label(text="2048", width=5, height=1, font=("Arial", 30)))
+label_title = (Label(text="2048", width=5, height=1, font=("Arial", 30), bg="#2E2E2E", fg="#FFFFFF"))
 label_title.place(x=x0_title, y=y0_title)
 
 # score label
-label_score = Label(text="Score : 0000", width= 15, height=1, font=("Arial", 15))
+label_score = Label(text="Score : 0000", width= 15, height=1, font=("Arial", 15), bg="#2E2E2E", fg="#FFFFFF")
 label_score.place(x=x0_score, y=y0_score)
 
 # timer label
-label_timer = Label(text="Timer : 0000", width= 15, height=1, font=("Arial", 12))
+label_timer = Label(text="Timer : 0000", width= 15, height=1, font=("Arial", 12), bg="#2E2E2E", fg="#FFFFFF")
 label_timer.place(x=x0_timer, y=y0_timer)
 
 # button to start a new game
-btn_newGame = tk.Button(win, text="New game", width=10, height=1, font=("Arial", 15), command=start_game)
+btn_newGame = tk.Button(win, text="New game", width=10, height=1, font=("Arial", 15), command=start_game, bg="#2E2E2E", fg="#FFFFFF")
 btn_newGame.place(x=x0_btn_ng, y=y0_btn_ng)
 
 # button to undo the last move
-btn_undo = tk.Button(win, text="Undo", width=5, height=1, font=("Arial", 15), command=undo)
+btn_undo = tk.Button(win, text="Undo", width=5, height=1, font=("Arial", 15), command=undo, bg="#2E2E2E", fg="#FFFFFF")
 btn_undo.place(x=x0_btn_ud, y=y0_btn_ud)
+
+# button to switch to 6x6 mode
+btn_6x6 = tk.Button(win, text="6x6", width=5, height=1, font=("Arial", 15), command=init_6x6, bg="#2E2E2E", fg="#FFFFFF")
+btn_6x6.place(x=x0_btn_6x6, y=y0_btn_6x6)
+
+# button to switch to 4x4 mode
+btn_4x4 = tk.Button(win, text="4x4", width=5, height=1, font=("Arial", 15), command=init_4x4, bg="#2E2E2E", fg="#FFFFFF")
+btn_4x4.place(x=x0_btn_4x4, y=y0_btn_4x4)
 
 
 # display game values
@@ -314,23 +373,14 @@ def display():
     for line in range(len(game)):
         for col in range(len(game[line])):
             if game[line][col]>0:
-                labels[line][col].config(text=game[line][col], bg=colors[game[line][col]])
+                labels[line][col].config(text=game[line][col], bg=colors[game[line][col]], fg="#000000")
             else:
                 labels[line][col].config(text="", bg=colors[game[line][col]])
     # update the displayed score
     label_score.config(text="Score : " + str(score))
 
 
-# labels creation and positioning
-for line in range(len(game)):
-    for col in range(len(game[line])):
-        # creation without placement
-        labels[line][col] = Label (win, text =game[line][col], width=9, height=4, borderwidth=1, relief="solid", font=("Arial", 15), bg="#FFFFFF",)
-        # label positioning in the windows
-        labels[line][col].place(x=x0_labels + dx * col, y=y0_labels + dy * line)
-
-
-start_game()
+init_4x4()
 update_timer()
 win.bind('<Key>', key_pressed)
 win.mainloop()
