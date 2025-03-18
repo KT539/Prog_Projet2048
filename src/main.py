@@ -38,11 +38,18 @@ def start_game():
 # function to switch to 6x6 mode
 def init_6x6():
     global game, labels, grid_size
+    # adjust the size of the window
     win.geometry("1000x850")
+    # destroy the existing widgets
+    for col in labels:
+        for label in col:
+            if label:
+                label.destroy()
+    # set the game format to 6x6
     grid_size = 6
-    clear_labels()
     labels = [[None for _ in range(grid_size)] for _ in range(grid_size)]
     game = [[0 for _ in range(grid_size)] for _ in range(grid_size)]
+    # adjust the position of the labels and buttons
     label_title.place(x=x0_title + 105, y=y0_title)
     label_timer.place(x=x0_timer + 105, y=y0_timer + 200)
     label_name.place(x=x0_name + 203, y=y0_name)
@@ -56,12 +63,19 @@ def init_6x6():
 # function to switch to 4x4 mode
 def init_4x4():
     global game, labels, grid_size
+    # adjust the size of the window
     win.geometry("800x650")
+    # destroy the existing widgets
+    for col in labels:
+        for label in col:
+            if label:
+                label.destroy()
+    # set the game format to 4x4
     grid_size = 4
-    clear_labels()
     labels = [[None for _ in range(grid_size)] for _ in range(grid_size)]
     #game = [[0 for _ in range(grid_size)] for _ in range(grid_size)]
     game = [[0,2,4,8],[16,32,64,128],[256,512,1024,2048],[4096,8192,0,0]]
+    # adjust the position of the labels and buttons
     label_title.place(x=x0_title, y=y0_title)
     label_timer.place(x=x0_timer, y=y0_timer)
     label_name.place(x=x0_name, y=y0_name)
@@ -72,18 +86,11 @@ def init_4x4():
     start_game()
 
 
-# function to clear the labels before a switch
-def clear_labels():
-    for col in labels:
-        for label in col:
-            if label :
-                label.destroy()
-
-
 # function to update the timer every second
 def update_timer():
     global time_count
     time_count += 1
+    # display the timer on a hh:mm:ss format
     hours = str(time_count // 3600).zfill(2)
     minutes = str((time_count % 3600) // 60).zfill(2)
     seconds = str(time_count % 60).zfill(2)
@@ -214,15 +221,14 @@ def key_pressed(event) :
 
 
 def gen_new_tile():
-    # create a list with every empty tiles
-    empty_tiles = []
     # create a list of new values with 80% of 2 and 20% of 4
     new_values = [2,2,2,2,2,2,2,2,4,4]
+    # create a list with every empty tiles
+    empty_tiles = []
     for line in range(grid_size):
         for col in range(grid_size):
             if game[line][col] == 0:
                 empty_tiles.append([line, col])
-    print(empty_tiles)
     # select a random tile from the empty_tiles list and give it a value from the new_values list
     if len(empty_tiles) > 0:
         new_tile = random.choice(empty_tiles)
@@ -253,8 +259,8 @@ def undo():
 # display game values
 def display():
     global score
-    for line in range(len(game)):
-        for col in range(len(game[line])):
+    for line in range(grid_size):
+        for col in range(grid_size):
             if game[line][col]>0:
                 labels[line][col].config(text=game[line][col], bg=colors[game[line][col]], fg="#000000")
             else:
@@ -285,21 +291,6 @@ time_count = 0
 game_state = []
 
 # dictionary of colors
-#colors = {0:"#FFFFFF",
-     #   2:"#D3D3D3",
-      #  4:"#A9A9A9",
-       # 8:"#808080",
-      #  16:"#6D6D6D",
-      #  32:"#595959",
-      #  64:"#484848",
-     #   128:"#3D3D3D",
-     #   256:"#2E2E2E",
-      #  512:"#C08D8D",
-      #  1024:"#9E4A4A",
-      #  2048:"#7A2828",
-      #  4096:"#5C1010",
-       # 8192:"#3E0000"}
-
 colors = {
     0: "#FFFFFF",
     2: "#E0E0E0",
@@ -309,12 +300,12 @@ colors = {
     32: "#505050",
     64: "#3A3A3A",
     128: "#292929",
-    256: "#1A1A1A",
-    512: "#D07B7B",
-    1024: "#B03A3A",
-    2048: "#8A1F1F",
-    4096: "#690909",
-    8192: "#4A0000"
+    256: "#D07B7B",
+    512: "#B03A3A",
+    1024: "#8A1F1F",
+    2048: "#690909",
+    4096: "#4A0000",
+    8192: "#2E0000"
 }
 
 # horizontal and vertical distance between labels
