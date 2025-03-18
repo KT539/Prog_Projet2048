@@ -1,7 +1,8 @@
 # Project: Prog_Projet2048
-# Title: main
+# Title: main.py
 # Author: Kilian Testard
-# Version: 0.4 11.03.2025
+# Version: 1.0 18.03.2025
+# functionalities : switches between 4x4 and 6x6 format, undo button, score display, timer, custom background
 
 import tkinter as tk
 from tkinter import *
@@ -13,18 +14,15 @@ import copy
 # function to start a new game
 def start_game():
     global score, game, time_count
+    # destroy the existing game labels
+    destroy_labels()
     # labels creation and positioning
-    for line in range(len(game)):
-        for col in range(len(game[line])):
-            # creation without placement
+    for line in range(grid_size):
+        for col in range(grid_size):
             labels[line][col] = Label(win, text=game[line][col], width=9, height=4, borderwidth=1, relief="solid", font=("Arial", 15), bg="#FFFFFF", )
-            # label positioning in the windows
             labels[line][col].place(x=x0_labels + dx * col, y=y0_labels + dy * line)
     # reset the values of every tile to 0
-    for line in range(len(game)):
-        for col in range(len(game[line])):
-            if game[line][col] > 0:
-                game[line][col] = 0
+    game = [[0 for _ in range(grid_size)] for _ in range(grid_size)]
     # reset the score to 0
     score = 0
     # reset the timer
@@ -39,7 +37,7 @@ def init_6x6():
     global game, labels, grid_size
     # adjust the size of the window
     win.geometry("1000x850")
-    # destroy the existing widgets
+    # destroy the existing game labels
     destroy_labels()
     # set the game format to 6x6
     grid_size = 6
@@ -61,13 +59,12 @@ def init_4x4():
     global game, labels, grid_size
     # adjust the size of the window
     win.geometry("800x650")
-    # destroy the existing widgets
+    # destroy the existing game labels
     destroy_labels()
     # set the game format to 4x4
     grid_size = 4
     labels = [[None for _ in range(grid_size)] for _ in range(grid_size)]
     game = [[0 for _ in range(grid_size)] for _ in range(grid_size)]
-    #game = [[0,2,4,8],[16,32,64,128],[256,512,1024,2048],[4096,8192,0,0]]
     # adjust the position of the labels and buttons
     label_title.place(x=x0_title, y=y0_title)
     label_timer.place(x=x0_timer, y=y0_timer)
@@ -105,9 +102,10 @@ def win_check():
     global win_status
     for line in range(grid_size):
         for col in range(grid_size):
-            # flag trigger the first time a tile reaches 2048
+            # trigger the flag the first time a tile reaches 2048
             if game[line][col] == 2048 and win_status == False:
                 win_status = True
+                display()
                 win_player_input()
 
 
@@ -159,10 +157,13 @@ def loss_player_input():
 def pack(values, score):
     nb_move = 0
     n = len(values)
-
-    # compressing all positive values in a direction, filling the rest of the line/column with zeroes
+    # compressing all positive values in a direction
+    temp_values = copy.deepcopy(values)
     values = [v for v in values if v != 0]
-    nb_move += n - len(values)
+    # check if a movement occurred
+    if values != temp_values[:len(values)]:
+        nb_move += 1
+    # fill the rest of the list with zeroes
     values = values + [0] * (n - len(values))
     # fuse identical values together
     for i in range(n - 1):
@@ -171,7 +172,7 @@ def pack(values, score):
             values[i + 1] = 0
             nb_move += 1
             score += values[i]
-    # compress all positive values again
+    # compress all positive values and fill with zeroes again
     values = [v for v in values if v != 0]
     values = values + [0] * (n - len(values))
     return values, nb_move, score
@@ -256,6 +257,7 @@ def key_pressed(event) :
     # get the key symbol
     touche=event.keysym
     if (touche=="Right" or touche=="d" or touche=="D"):
+        # save the game state before any movement occurs
         memorize_game_state()
         total_move = move_right()
     if (touche=="Left" or touche=="a" or touche=="A"):
@@ -287,7 +289,6 @@ def gen_new_tile():
     # select a random tile from the empty_tiles list and give it a value from the new_values list
     if len(empty_tiles) > 0:
         new_tile = random.choice(empty_tiles)
-        print(new_tile)
         game[new_tile[0]][new_tile[1]] = random.choice(new_values)
     display()
     loss_check()
@@ -296,6 +297,7 @@ def gen_new_tile():
 # function to memorize the state of the game
 def memorize_game_state():
     global game_state
+    # clear the list if it already exists, and save the game state
     game_state.clear()
     game_state.append(copy.deepcopy(game))
     game_state.append(score)
@@ -305,6 +307,7 @@ def memorize_game_state():
 # function to roll back to the memorized game state
 def undo():
     global game, score, win_status
+    # set the current game values to the memorized game state
     game = game_state[0]
     score = game_state[1]
     win_status = game_state[2]
@@ -314,10 +317,14 @@ def undo():
 # display game values
 def display():
     global score
+    # display the updated game labels
     for line in range(grid_size):
         for col in range(grid_size):
-            if game[line][col]>0:
+            if game[line][col]>0 and game[line][col]<8192:
                 labels[line][col].config(text=game[line][col], bg=colors[game[line][col]], fg="#000000")
+            # custom fg for the 8192 tiles, for the sake of contrast
+            elif game[line][col]==8192:
+                labels[line][col].config(text=game[line][col], bg=colors[game[line][col]], fg="#FFFFFF")
             else:
                 labels[line][col].config(text="", bg=colors[game[line][col]])
     # update the displayed score
