@@ -1,11 +1,11 @@
 # Project: Prog_Projet2048
-# Title: Pack4_function
+# Title: Pack_function
 # Author: Kilian Testard
 # Version: 0.4 11.03.2025
 
 
 # function to pack any set of values in any direction
-def pack4(a, b, c, d, e, f, score):
+def pack(a, b, c, d, e, f, score):
     # base value for counting the fusions
     nb_fusion = 0
 
