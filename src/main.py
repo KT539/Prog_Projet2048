@@ -30,6 +30,7 @@ def start_game():
     # generate two random tiles
     gen_new_tile()
     gen_new_tile()
+    memorize_game_state()
 
 
 # function to switch to 6x6 format
@@ -43,7 +44,6 @@ def init_6x6():
     grid_size = 6
     labels = [[None for _ in range(grid_size)] for _ in range(grid_size)]
     game = [[0 for _ in range(grid_size)] for _ in range(grid_size)]
-    #game = [[0,0,2,2,4,4],[8,8,16,16,32,32],[64,64,128,128,256,256],[512,512,1024,1024,2048,2048],[4096,4096,8192,8192,0,0],[0,0,0,0,0,0]]
     # adjust the position of the labels and buttons
     label_title.place(x=x0_title + 104, y=y0_title)
     label_timer.place(x=x0_timer + 105, y=y0_timer + 200)
